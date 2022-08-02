@@ -1,0 +1,150 @@
+<!--Parctice input commands-->
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Coin Game</title>
+        <style>
+            #frame {
+                width: 70%;
+                border: 1px solid #000;
+            }
+            button {
+                width: 50px;
+                height: 30px;
+                margin-bottom: 5px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div align="center">
+            <canvas  id="frame" width="300" height="200">
+                Your browser does not support the HTML5 canvas tag.
+            </canvas>
+        </div>
+        <div align="center">
+            <button id="up">&uarr;</button><br/>
+            <button id="left">&larr;</button>
+            <button id="down">&darr;</button>
+            <button id="right">&rarr;</button>
+        </div>
+
+        <script>
+
+            window.onload = function() {
+                var frame = document.getElementById("frame");
+                var screen = frame.getContext('2d');
+                var x = 125;
+                var y = 75;
+
+                var coinx = Math.random() * 275;
+                var coiny = Math.random() * 175;
+                var score = 0;
+
+                var time = Date.now();
+                let speed = 100;
+                let direct = 0;
+                
+                let right = document.getElementById('right');
+                let left = document.getElementById('left');
+                let down = document.getElementById('down');
+                let up = document.getElementById('up');
+                
+
+                right.onmousedown = function() {direct = 1;}
+                right.onmouseup = function() {direct = 0;}
+                right.ontouchstart = function() {direct = 1;}
+                right.ontouchend = function() {direct = 0;}
+
+                left.onmousedown = function() {direct = 2;}
+                left.onmouseup = function() {direct = 0;}
+                left.ontouchstart = function() {direct = 2;}
+                left.ontouchend = function() {direct = 0;}
+
+                up.onmousedown = function() {direct = 3;}
+                up.onmouseup = function() {direct = 0;}
+                up.ontouchstart = function() {direct = 3;}
+                up.ontouchend = function() {direct = 0;}
+
+                down.onmousedown = function() {direct = 4;}
+                down.onmouseup = function() {direct = 0;}
+                down.ontouchstart = function() {direct = 4;}
+                down.ontouchend = function() {direct = 0;}
+
+                document.addEventListener('keydown', (event) => {
+                    var name = event.key;
+                    if (name == 'ArrowRight') {direct = 1;}
+                    if (name == 'ArrowLeft') {direct = 2;}
+                    if (name == 'ArrowUp') {direct = 3;}
+                    if (name == 'ArrowDown') {direct = 4;}
+                })
+
+                document.addEventListener('keyup', (event) => {
+                    var name = event.key;
+                    if (name == 'ArrowRight') {direct = 0;}
+                    if (name == 'ArrowLeft') {direct = 0;}
+                    if (name == 'ArrowUp') {direct = 0;}
+                    if (name == 'ArrowDown') {direct = 0;}
+                })
+
+                function boxie() {
+                    var timeLapsed = (Date.now() - time) / 1000;
+                    time = Date.now();
+                    var fps = Math.round(1 / timeLapsed);
+
+                    screen.clearRect(0, 0, 300, 200);
+                    
+                    screen.beginPath();
+                    screen.font = '20px Times';
+                    screen.fillStyle = 'black';
+                    screen.fillText("Score: " + score, 15,20);
+
+                    screen.beginPath();
+                    screen.rect(x, y, 50, 50);
+                    screen.fillStyle="#064";
+                    screen.fill();
+
+                    screen.beginPath();
+                    screen.rect(coinx, coiny, 25, 25);
+                    screen.fillStyle="#CF7";
+                    screen.fill();
+
+                    if (direct == 1) {
+                        if (x < 250){
+                            x += (speed * timeLapsed);
+                        }
+                        
+                    }
+                    else if (direct == 2) {
+                        if (x > 0) {
+                            x -= (speed * timeLapsed);
+                        }
+                    }
+                    else if (direct == 3) {
+                        if (y > 0) {
+                            y -= (speed * timeLapsed);
+                        }
+                    }
+                    else if (direct == 4) {
+                        if (y < 150) {
+                            y += (speed * timeLapsed);
+                        }
+                    }
+
+                    if (coinx <= x+50 && x <= coinx+25 && coiny <= y+50 && y <= coiny+25) {
+                        score++;
+                        coinx = Math.random() * 275;
+                        coiny = Math.random() * 175;
+                    }
+
+                    window.requestAnimationFrame(boxie);
+                }
+                boxie();
+            }
+
+        </script>
+    </body>
+</html>
+
